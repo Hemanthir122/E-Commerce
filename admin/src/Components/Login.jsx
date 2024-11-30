@@ -1,25 +1,25 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { backendUrl } from '../App';
+import { toast } from 'react-toastify';
 
-const Login = () => {
+const Login = ({setToken}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const onSubmitHandler = async (e) => {
-        e.preventDefault(); // Prevent form from reloading the page
+       // Prevent form from reloading the page
         try {
-            const response = await axios.post(`${backendUrl}/api/user/admin`, { email, password });
-            console.log('Response:', response.data); // Log the response data
-        } catch (error) {
-            console.error('Error occurred:', error.message);
-            if (error.response) {
-                console.error('Server responded with:', error.response.data); // Log server response errors
-            } else if (error.request) {
-                console.error('No response from server:', error.request); // Log network errors
-            } else {
-                console.error('Error setting up request:', error.message);
+            e.preventDefault(); 
+            const response = await axios.post(backendUrl+`/api/user/admin`, { email, password });
+            if(response.data.success){
+                setToken(response.data.token)
+            }else{
+                    toast.error(response.data.message)
             }
+        }catch(error){
+                console.log(error);
+                toast.error(error.message)
         }
     };
 
