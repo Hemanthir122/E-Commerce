@@ -14,11 +14,14 @@ const addProduct = async(req,res)=>{
                 const image4=req.files.image4 && req.files.image4[0]
                 
                 const images=[image1,image2,image3,image4].filter((item)=>item!==undefined)
+                
                 let imageUrl=await Promise.all(
-                    images.map(async()=>{
-                        let result=await cloudinary.uploader.upload(item.path,{resource_type:'image'})
-                        return result.secure_url
+                    images.map(async(item) => {
+                        let result = await cloudinary.uploader.upload(item.path, { resource_type: 'image' });
+                       
+                        return result.secure_url;
                     })
+                    
                 )
 
                const productData={
@@ -32,9 +35,9 @@ const addProduct = async(req,res)=>{
 
                
 
-        }catch(errorr){
+        }catch(error){
             console.log(error)
-            res.json({success:false,message:errorr.message})
+            res.json({success:false,message:error.message})
 
         }
 
@@ -51,7 +54,7 @@ const listProduct = async(req,res)=>{
         res.json({success:true,products})
     }catch(error){
         console.log(error)
-            res.json({success:false,message:errorr.message})
+            res.json({success:false,message:error.message})
 
     }
 }
@@ -65,7 +68,7 @@ const removeProduct = async(req,res)=>{
         res.json({success:true,message:"product is deleted"})
     } catch (error) {
         console.log(error)
-        res.json({success:false,message:errorr.message})
+        res.json({success:false,message:error.message})
     }
     
 }
@@ -80,7 +83,7 @@ const singleProduct = async(req,res)=>{
     res.json({success:true,product})
 }catch(error){
     console.log(error)
-    res.json({success:false,message:errorr.message})
+    res.json({success:false,message:error.message})
 }
 }
 
